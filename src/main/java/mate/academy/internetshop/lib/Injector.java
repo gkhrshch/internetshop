@@ -30,6 +30,7 @@ public class Injector {
                 if (userDaoImplClass.getDeclaredAnnotation(Dao.class) != null) {
                     field.setAccessible(true);
                     field.set(null, UserDaoFactory.getUserDao());
+
                 }
             }
         }

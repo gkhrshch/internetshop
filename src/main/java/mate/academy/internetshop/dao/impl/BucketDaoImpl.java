@@ -2,10 +2,12 @@ package mate.academy.internetshop.dao.impl;
 
 import mate.academy.internetshop.dao.BucketDao;
 import mate.academy.internetshop.db.Storage;
+import mate.academy.internetshop.lib.Dao;
 import mate.academy.internetshop.model.Bucket;
 
 import java.util.NoSuchElementException;
 
+@Dao
 public class BucketDaoImpl implements BucketDao {
 
     @Override
@@ -26,5 +28,10 @@ public class BucketDaoImpl implements BucketDao {
     @Override
     public Bucket update(Bucket bucket) {
         return null;
+    }
+
+    @Override
+    public Bucket delete(Bucket bucket) {
+
     }
 }

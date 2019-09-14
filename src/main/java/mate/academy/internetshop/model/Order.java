@@ -1,5 +1,9 @@
 package mate.academy.internetshop.model;
 
-public class Order {
+import java.util.List;
 
+public class Order {
+    private Long id;
+    private List<Item> items;
+    private User user;
 }

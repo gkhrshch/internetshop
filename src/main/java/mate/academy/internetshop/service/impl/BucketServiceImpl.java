@@ -23,7 +23,6 @@ public class BucketServiceImpl implements BucketService {
         return bucket;
     }
 
-
     @Override
     public Bucket get(Long id) {
         Bucket bucket = bucketDao.get(id);

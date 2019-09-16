@@ -10,7 +10,7 @@ public interface ItemService {
 
     Item update(Item item);
 
-    void delete(Long id);
+    Item delete(Long id);
 
-    void deleteByItem(Item item);
+    Item delete(Item item);
 }

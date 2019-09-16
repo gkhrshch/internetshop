@@ -11,6 +11,7 @@ import mate.academy.internetshop.dao.impl.BucketDaoImpl;
 import mate.academy.internetshop.dao.impl.ItemDaoImpl;
 import mate.academy.internetshop.dao.impl.OrderDaoImpl;
 import mate.academy.internetshop.dao.impl.UserDaoImpl;
+import mate.academy.internetshop.model.Bucket;
 import mate.academy.internetshop.service.BucketService;
 import mate.academy.internetshop.service.ItemService;
 import mate.academy.internetshop.service.OrderService;
@@ -31,72 +32,49 @@ public class Injector {
     }
 
     private static void inject(Field[] fields) throws IllegalAccessException {
-        Class<UserDaoImpl> userDaoImplClass = UserDaoImpl.class;
-        Class<OrderDaoImpl> orderDaoImplClass = OrderDaoImpl.class;
-        Class<ItemDaoImpl> itemDaoImplClass = ItemDaoImpl.class;
-        Class<BucketDaoImpl> bucketDaoImplClass = BucketDaoImpl.class;
-        Class<UserServiceImpl> userServiceImplClass = UserServiceImpl.class;
-        Class<OrderServiceImpl> orderServiceImplClass = OrderServiceImpl.class;
-        Class<ItemServiceImpl> itemServiceImplClass = ItemServiceImpl.class;
-        Class<BucketServiceImpl> bucketServiceImplClass = BucketServiceImpl.class;
         for (Field field : fields) {
-            if (field.getDeclaredAnnotation(Inject.class) != null
-                    && field.getType().equals(UserDao.class)) {
-                if (userDaoImplClass.getDeclaredAnnotation(Dao.class) != null) {
+            if (field.getDeclaredAnnotation(Inject.class) != null) {
+                if (field.getType().equals(UserDao.class)
+                        && UserDaoImpl.class.getDeclaredAnnotation(Dao.class) != null) {
                     field.setAccessible(true);
                     field.set(null, Factory.getUserDao());
                 }
-            }
-            if (field.getDeclaredAnnotation(Inject.class) != null
-                    && field.getType().equals(OrderDao.class)) {
-                if (orderDaoImplClass.getDeclaredAnnotation(Dao.class) != null) {
+                if (field.getType().equals(OrderDao.class)
+                        && OrderDaoImpl.class.getDeclaredAnnotation(Dao.class) != null) {
                     field.setAccessible(true);
                     field.set(null, Factory.getOrderDao());
                 }
-            }
-            if (field.getDeclaredAnnotation(Inject.class) != null
-                    && field.getType().equals(ItemDao.class)) {
-                if (itemDaoImplClass.getDeclaredAnnotation(Dao.class) != null) {
+                if (field.getType().equals(ItemDao.class)
+                        && ItemDaoImpl.class.getDeclaredAnnotation(Dao.class) != null) {
                     field.setAccessible(true);
                     field.set(null, Factory.getItemDao());
                 }
-            }
-            if (field.getDeclaredAnnotation(Inject.class) != null
-                    && field.getType().equals(BucketDao.class)) {
-                if (bucketDaoImplClass.getDeclaredAnnotation(Dao.class) != null) {
+                if (field.getType().equals(BucketDao.class)
+                        && BucketDaoImpl.class.getDeclaredAnnotation(Dao.class) != null) {
                     field.setAccessible(true);
                     field.set(null, Factory.getBucketDao());
                 }
-            }
-            if (field.getDeclaredAnnotation(Inject.class) != null
-                    && field.getType().equals(UserService.class)) {
-                if (userServiceImplClass.getDeclaredAnnotation(Service.class) != null) {
+                if (field.getType().equals(UserService.class)
+                        && UserServiceImpl.class.getDeclaredAnnotation(Service.class) != null) {
                     field.setAccessible(true);
                     field.set(null, Factory.getUserService());
                 }
-            }
-            if (field.getDeclaredAnnotation(Inject.class) != null
-                    && field.getType().equals(OrderService.class)) {
-                if (orderServiceImplClass.getDeclaredAnnotation(Service.class) != null) {
+                if (field.getType().equals(OrderService.class)
+                        && OrderServiceImpl.class.getDeclaredAnnotation(Service.class) != null) {
                     field.setAccessible(true);
                     field.set(null, Factory.getOrderService());
                 }
-            }
-            if (field.getDeclaredAnnotation(Inject.class) != null
-                    && field.getType().equals(ItemService.class)) {
-                if (itemServiceImplClass.getDeclaredAnnotation(Service.class) != null) {
+                if (field.getType().equals(ItemService.class)
+                        && ItemServiceImpl.class.getDeclaredAnnotation(Service.class) != null) {
                     field.setAccessible(true);
                     field.set(null, Factory.getItemService());
                 }
-            }
-            if (field.getDeclaredAnnotation(Inject.class) != null
-                    && field.getType().equals(BucketService.class)) {
-                if (bucketServiceImplClass.getDeclaredAnnotation(Service.class) != null) {
+                if (field.getType().equals(BucketService.class)
+                        && BucketServiceImpl.class.getDeclaredAnnotation(Service.class) != null) {
                     field.setAccessible(true);
                     field.set(null, Factory.getBucketService());
                 }
             }
         }
-
     }
 }

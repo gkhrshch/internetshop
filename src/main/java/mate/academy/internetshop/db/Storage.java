@@ -8,6 +8,7 @@ import mate.academy.internetshop.model.Order;
 import mate.academy.internetshop.model.User;
 
 public class Storage {
+
     public static final List<Item> items = new ArrayList<>();
     public static final List<Bucket> buckets = new ArrayList<>();
     public static final List<Order> orders = new ArrayList<>();

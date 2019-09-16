@@ -1,18 +1,18 @@
 package mate.academy.internetshop.dao.impl;
 
+import java.util.NoSuchElementException;
 import mate.academy.internetshop.dao.ItemDao;
 import mate.academy.internetshop.db.Storage;
 import mate.academy.internetshop.lib.Dao;
 import mate.academy.internetshop.model.Item;
 
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-
 @Dao
 public class ItemDaoImpl implements ItemDao {
+
     @Override
     public Item create(Item item) {
         Storage.items.add(item);
+        return  item;
     }
 
     @Override
@@ -21,24 +21,27 @@ public class ItemDaoImpl implements ItemDao {
                 .stream()
                 .filter(i -> i.getId().equals(id))
                 .findFirst()
-                .orElseThrow(NoSuchElementException::new("Can't find item with id " + id));
+                .orElseThrow(() -> new NoSuchElementException(
+                "Can't find item with id " + id));
     }
 
     @Override
-    public Item update(Item item) {
-        return null;
+    public Item update(Item toUpdate) {
+        Item item = get(toUpdate.getId());
+        item.setName(toUpdate.getName());
+        return item;
     }
 
     @Override
     public Item delete(Long id) {
         Item item = get(id);
-        Storage.items.removeIf(item -> item.getId().equals(id));
+        Storage.items.removeIf(i -> i.getId().equals(id));
         return item;
     }
 
     @Override
     public Item delete(Item item) {
-        Storage.items.removeIf(item -> item.equals(item));
+        Storage.items.removeIf(i -> i.equals(item));
         return item;
     }
 }

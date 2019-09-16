@@ -1,7 +1,9 @@
 package mate.academy.internetshop.dao;
 
+import mate.academy.internetshop.lib.Dao;
 import mate.academy.internetshop.model.Bucket;
 
+@Dao
 public interface BucketDao {
 
     Bucket create(Bucket bucket);
@@ -10,5 +12,5 @@ public interface BucketDao {
 
     Bucket update(Bucket bucket);
 
-    Bucket delete(Bucket bucket);
+    Bucket delete(Long id);
 }

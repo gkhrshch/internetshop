@@ -28,11 +28,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<Item> getAllItems() {
-        List<Item> allItems = Storage.items.stream()
-                                    .distinct()
-                                    .collect(Collectors.toList());
-        Collections.sort(allItems);
-        return allItems;
+        return itemDao.getAll();
     }
 
     @Override

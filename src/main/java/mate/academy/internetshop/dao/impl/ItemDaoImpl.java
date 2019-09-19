@@ -1,6 +1,10 @@
 package mate.academy.internetshop.dao.impl;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
+
 import mate.academy.internetshop.dao.ItemDao;
 import mate.academy.internetshop.db.Storage;
 import mate.academy.internetshop.lib.Dao;
@@ -43,5 +47,14 @@ public class ItemDaoImpl implements ItemDao {
     public Item delete(Item item) {
         Storage.items.remove(item);
         return item;
+    }
+
+    @Override
+    public List<Item> getAll() {
+        List<Item> allItems = Storage.items.stream()
+                .distinct()
+                .collect(Collectors.toList());
+        Collections.sort(allItems);
+        return allItems;
     }
 }

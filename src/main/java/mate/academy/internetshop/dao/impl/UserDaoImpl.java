@@ -27,7 +27,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public User update(User toUpdate) {
         User user = get(toUpdate.getId());
-        user.setBucket(toUpdate.getBucket());
+        //user.setBucket(toUpdate.getBucket());
         user.setName(toUpdate.getName());
         user.setOrders(toUpdate.getOrders());
         return user;
@@ -36,7 +36,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public User delete(Long id) {
         User user = get(id);
-        Storage.users.removeIf(u -> u.getId().equals(id));
+        Storage.users.remove(user);
         return user;
     }
 }

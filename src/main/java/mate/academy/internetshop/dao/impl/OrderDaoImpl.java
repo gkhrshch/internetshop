@@ -35,7 +35,7 @@ public class OrderDaoImpl implements OrderDao {
     @Override
     public Order delete(Long id) {
         Order order = get(id);
-        Storage.orders.removeIf(o -> o.getId().equals(id));
+        Storage.orders.remove(order);
         return order;
     }
 }

@@ -2,7 +2,7 @@ package mate.academy.internetshop.model;
 
 import mate.academy.internetshop.IdGenerator;
 
-public class Item {
+public class Item implements Comparable<Item> {
     private final Long id;
     private String name;
     private Double price;
@@ -40,5 +40,10 @@ public class Item {
                 + ", name=" + "'"
                 + name + "', price="
                 + price + "}";
+    }
+
+    @Override
+    public int compareTo(Item item) {
+        return this.name.compareTo(item.getName());
     }
 }

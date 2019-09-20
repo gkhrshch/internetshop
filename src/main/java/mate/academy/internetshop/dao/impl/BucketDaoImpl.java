@@ -16,13 +16,13 @@ public class BucketDaoImpl implements BucketDao {
     }
 
     @Override
-    public Bucket get(Long bucketId) {
+    public Bucket get(Long id) {
         return Storage.buckets
                 .stream()
-                .filter(b -> b.getId().equals(bucketId))
+                .filter(b -> b.getId().equals(id))
                 .findFirst()
                 .orElseThrow(() -> new NoSuchElementException(
-                "Can't find bucket with id " + bucketId));
+                "Can't find bucket with id " + id));
     }
 
     @Override
@@ -35,7 +35,7 @@ public class BucketDaoImpl implements BucketDao {
     @Override
     public Bucket delete(Long id) {
         Bucket bucket = get(id);
-        Storage.buckets.removeIf(b -> b.getId().equals(id));
+        Storage.buckets.remove(bucket);
         return bucket;
     }
 }

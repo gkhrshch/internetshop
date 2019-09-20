@@ -1,4 +1,5 @@
 .idea/*
 *.iml
 .target/*
-.webapp/*
+*.log
+Main.class

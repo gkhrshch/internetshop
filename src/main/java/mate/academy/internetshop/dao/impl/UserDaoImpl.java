@@ -1,5 +1,6 @@
 package mate.academy.internetshop.dao.impl;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import mate.academy.internetshop.dao.UserDao;
 import mate.academy.internetshop.db.Storage;
@@ -27,7 +28,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public User update(User toUpdate) {
         User user = get(toUpdate.getId());
-        user.setBucket(toUpdate.getBucket());
+        //user.setBucket(toUpdate.getBucket());    uncomment after bucket bound to user is fixed in webapp
         user.setName(toUpdate.getName());
         user.setOrders(toUpdate.getOrders());
         return user;
@@ -36,7 +37,12 @@ public class UserDaoImpl implements UserDao {
     @Override
     public User delete(Long id) {
         User user = get(id);
-        Storage.users.removeIf(u -> u.getId().equals(id));
+        Storage.users.remove(user);
         return user;
+    }
+
+    @Override
+    public List<User> getAll() {
+        return Storage.users;
     }
 }

@@ -1,6 +1,8 @@
 package mate.academy.internetshop.service.impl;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+
 import mate.academy.internetshop.dao.BucketDao;
 import mate.academy.internetshop.dao.ItemDao;
 import mate.academy.internetshop.lib.Inject;
@@ -45,6 +47,19 @@ public class BucketServiceImpl implements BucketService {
         Bucket bucket = bucketDao.get(bucketId);
         Item item = itemDao.get(itemId);
         bucket.getItems().add(item);
+        return bucketDao.update(bucket);
+    }
+
+    @Override
+    public Bucket removeItem(Long bucketId, Long itemId) {
+        Bucket bucket = bucketDao.get(bucketId);
+        Item item = itemDao.get(itemId);
+        bucket.getItems().stream()
+                .filter(i -> i.getId().equals(itemId))
+                .findFirst()
+                .orElseThrow(() -> new NoSuchElementException(
+                "Can't find item with id " + itemId));
+        bucket.getItems().remove(item);
         return bucketDao.update(bucket);
     }
 

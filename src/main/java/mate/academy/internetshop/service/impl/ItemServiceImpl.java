@@ -1,6 +1,10 @@
 package mate.academy.internetshop.service.impl;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 import mate.academy.internetshop.dao.ItemDao;
+import mate.academy.internetshop.db.Storage;
 import mate.academy.internetshop.lib.Inject;
 import mate.academy.internetshop.lib.Service;
 import mate.academy.internetshop.model.Item;
@@ -20,6 +24,11 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public Item get(Long id) {
         return itemDao.get(id);
+    }
+
+    @Override
+    public List<Item> getAllItems() {
+        return itemDao.getAll();
     }
 
     @Override

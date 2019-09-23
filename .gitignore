@@ -3,3 +3,6 @@
 .target/*
 *.log
 Main.class
+InjectorOld.class
+Main.java
+InjectorOld.java

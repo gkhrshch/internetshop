@@ -20,6 +20,7 @@ Items:
         <th>ID</th>
         <th>Name</th>
         <th>Price</th>
+        <th>Add Item To Bucket</th>
     </tr>
     <c:forEach var="item" items="${item}">
         <tr>
@@ -32,18 +33,11 @@ Items:
             <td>
                 <c:out value="${item.price}" />
             </td>
+            <td>
+                <a href="/internetshop_war_exploded/servlet/bucketAddItem?item_id=${item.id}">ADD</a>
+            </td>
         </tr>
     </c:forEach>
 </table>
 </body>
-<form action="/internetshop_war_exploded/servlet/bucketAddItem" method="post">
-    <div class="container">
-        <p>Please fill in these forms to add certain item to certain bucket.</p>
-        <label for="item_id"><b></b></label>
-        <input type="text" placeholder="Enter Item ID" name="item_id" required>
-        <label for="bucket_id"><b></b></label>
-        <input type="text" placeholder="Enter Bucket ID" name="bucket_id" required>
-        <button type="submit" class="registerbtn">Add To Bucket</button>
-    </div>
-</form>
 </html>

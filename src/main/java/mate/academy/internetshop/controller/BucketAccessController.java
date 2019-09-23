@@ -7,25 +7,25 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import mate.academy.internetshop.lib.Inject;
-import mate.academy.internetshop.model.Order;
-import mate.academy.internetshop.service.OrderService;
+import mate.academy.internetshop.model.Item;
+import mate.academy.internetshop.model.User;
+import mate.academy.internetshop.service.BucketService;
 import mate.academy.internetshop.service.UserService;
 
-public class DeleteOrderController extends HttpServlet {
+public class BucketAccessController extends HttpServlet {
     @Inject
-    private static OrderService orderService;
+    private static BucketService bucketService;
     @Inject
     private static UserService userService;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        Long orderId = Long.parseLong(req.getParameter("order_id"));
         Long userId = (Long) req.getSession(true).getAttribute("userId");
-        Order toDelete = orderService.get(orderId);
-        List<Order> userOrders = userService.getOrders(userId);
-        userOrders.remove(toDelete);
-        orderService.delete(orderId);
-        req.getRequestDispatcher("/WEB-INF/views/orders.jsp").forward(req, resp);
+        User user = userService.get(userId);
+        List<Item> items = bucketService.getAllItems(user.getBucket());
+        req.setAttribute("user", user.getName());
+        req.setAttribute("item", items);
+        req.getRequestDispatcher("/WEB-INF/views/bucketAccess.jsp").forward(req, resp);
     }
 }

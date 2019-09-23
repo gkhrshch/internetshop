@@ -3,3 +3,8 @@
 .target/*
 *.log
 Main.class
+InjectorOld.class
+Main.java
+InjectorOld.java
+mate.academy.internetshop.Main
+mate.academy.internetshop.lib.InjectorOld

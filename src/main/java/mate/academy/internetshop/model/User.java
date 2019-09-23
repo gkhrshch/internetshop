@@ -10,15 +10,15 @@ public class User {
     private String surname;
     private String login;
     private String password;
-    //private Bucket bucket;
-    //Uncomment private bucket after creating healthy bucket service in webapp
+    private String token;
+    private Bucket bucket;
     private List<Order> orders;
 
     public User(String name) {
         this.id = IdGenerator.getUserId();
         this.name = name;
         this.orders = new ArrayList<>();
-        //this.bucket = new Bucket(this.id);
+        this.bucket = new Bucket(this.id);
     }
 
     public Long getId() {
@@ -57,13 +57,21 @@ public class User {
         this.password = password;
     }
 
-    /*public Bucket getBucket() {
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public Bucket getBucket() {
         return bucket;
     }
 
     public void setBucket(Bucket bucket) {
         this.bucket = bucket;
-    }*/
+    }
 
     public List<Order> getOrders() {
         return orders;

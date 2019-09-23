@@ -8,24 +8,23 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import mate.academy.internetshop.lib.Inject;
 import mate.academy.internetshop.model.Item;
+import mate.academy.internetshop.model.User;
 import mate.academy.internetshop.service.BucketService;
+import mate.academy.internetshop.service.UserService;
 
-public class BucketAccessByIdController extends HttpServlet {
+public class BucketAccessController extends HttpServlet {
     @Inject
     private static BucketService bucketService;
+    @Inject
+    private static UserService userService;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        req.getRequestDispatcher("/WEB-INF/views/bucketAccess.jsp").forward(req, resp);
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
-        String bucketId = req.getParameter("id");
-        List<Item> items = bucketService.getAllItems(Long.parseLong(bucketId));
-        req.setAttribute("bucketId", bucketId);
+        Long userId = (Long) req.getSession(true).getAttribute("userId");
+        User user = userService.get(userId);
+        List<Item> items = bucketService.getAllItems(user.getBucket());
+        req.setAttribute("user", user.getName());
         req.setAttribute("item", items);
         req.getRequestDispatcher("/WEB-INF/views/bucketAccess.jsp").forward(req, resp);
     }

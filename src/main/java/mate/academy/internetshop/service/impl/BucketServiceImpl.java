@@ -69,7 +69,7 @@ public class BucketServiceImpl implements BucketService {
         return bucket;
     }
 
-    public List<Item> getAllItems(Long bucketId) {
-        return bucketDao.get(bucketId).getItems();
+    public List<Item> getAllItems(Bucket bucket) {
+        return bucketDao.get(bucket.getId()).getItems();
     }
 }

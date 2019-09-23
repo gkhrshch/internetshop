@@ -15,7 +15,7 @@
 </head>
 <body>
 Hello, ${greeting}, welcome to the All Users Page!
-<p><button onclick="window.location.href = '/internetshop_war_exploded/servlet/registration';">Register</button></p>
+<p><button onclick="window.location.href = '/internetshop_war_exploded/registration';">Register</button></p>
 Users:
 <table border="1">
     <tr>

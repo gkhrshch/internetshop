@@ -21,7 +21,7 @@ public class DeleteOrderController extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         Long orderId = Long.parseLong(req.getParameter("order_id"));
-        Long userId = Long.parseLong(req.getParameter("user_id"));
+        Long userId = (Long) req.getSession(true).getAttribute("userId");
         Order toDelete = orderService.get(orderId);
         List<Order> userOrders = userService.getOrders(userId);
         userOrders.remove(toDelete);

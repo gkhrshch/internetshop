@@ -1,9 +1,7 @@
 package mate.academy.internetshop.controller;
 
 import mate.academy.internetshop.lib.Inject;
-import mate.academy.internetshop.model.Bucket;
 import mate.academy.internetshop.model.Item;
-import mate.academy.internetshop.model.User;
 import mate.academy.internetshop.service.BucketService;
 import mate.academy.internetshop.service.ItemService;
 import mate.academy.internetshop.service.OrderService;
@@ -26,15 +24,5 @@ public class InjectData {
         itemService.create(item1);
         itemService.create(item2);
         itemService.create(item3);
-        userService.create(new User("username"));
-        userService.create(new User("username"));
-        Bucket bucket1 = new Bucket();
-        Bucket bucket2 = new Bucket();
-        bucketService.create(bucket1);
-        bucketService.create(bucket2);
-        bucketService.addItem(bucket1.getId(), item1.getId());
-        bucketService.addItem(bucket1.getId(), item2.getId());
-        bucketService.addItem(bucket1.getId(), item3.getId());
-        bucketService.addItem(bucket2.getId(), item1.getId());
     }
 }

@@ -12,7 +12,7 @@
     <title>View Orders Page</title>
 </head>
 <body>
-Orders by user ID: ${userId}
+Orders of user: ${name}
 <table border="1">
     <tr>
         <th>Order ID</th>
@@ -28,18 +28,10 @@ Orders by user ID: ${userId}
                 <c:out value="${order}" />
             </td>
             <td>
-                <a href="/internetshop_war_exploded/servlet/deleteOrder?order_id=${order.id}&user_id=${userId}">DELETE</a>
+                <a href="/internetshop_war_exploded/servlet/deleteOrder?order_id=${order.id}">DELETE</a>
             </td>
         </tr>
     </c:forEach>
 </table>
-<form action="/internetshop_war_exploded/servlet/orderAccess" method="post">
-    <p>To view orders, please enter userID</p>
-    <div class="container">
-        <label for="user_id"><b></b></label>
-        <input type="text" placeholder="Enter User ID" name="user_id" required>
-        <button type="submit" class="registerbtn">View Orders</button>
-    </div>
-</form>
 </body>
 </html>

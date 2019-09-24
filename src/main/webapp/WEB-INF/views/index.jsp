@@ -12,5 +12,8 @@
 </head>
 <body>
 Hello World!
+<p><a href='/internetshop_war_exploded/servlet/getAllItems'>Available Items</a></p>
+<p><a href='/internetshop_war_exploded/servlet/bucketAccess'>Your Bucket</a></p>
+<p><a href='/internetshop_war_exploded/servlet/orderAccess'>Your Orders</a></p>
 </body>
 </html>

@@ -14,7 +14,6 @@ import mate.academy.internetshop.service.UserService;
 public class DeleteOrderController extends HttpServlet {
     @Inject
     private static OrderService orderService;
-
     @Inject
     private static UserService userService;
 

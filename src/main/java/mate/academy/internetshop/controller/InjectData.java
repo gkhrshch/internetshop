@@ -1,6 +1,7 @@
 package mate.academy.internetshop.controller;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -13,6 +14,7 @@ import mate.academy.internetshop.service.BucketService;
 import mate.academy.internetshop.service.ItemService;
 import mate.academy.internetshop.service.OrderService;
 import mate.academy.internetshop.service.UserService;
+import org.apache.log4j.Logger;
 
 public class InjectData extends HttpServlet {
     @Inject
@@ -24,13 +26,19 @@ public class InjectData extends HttpServlet {
     @Inject
     private static ItemService itemService;
 
+    private static Logger logger = Logger.getLogger(InjectData.class);
+
     public static void injectData() throws IllegalAccessException {
         Item item1 = new Item("hleb", 1.11);
         Item item2 = new Item("arbuz", 2.22);
         Item item3 = new Item("mivina", 3.33);
-        itemService.create(item1);
-        itemService.create(item2);
-        itemService.create(item3);
+        try {
+            itemService.create(item1);
+            itemService.create(item2);
+            itemService.create(item3);
+        } catch (SQLException e) {
+            logger.warn("inject failed", e);
+        }
     }
 
     @Override

@@ -43,12 +43,6 @@ public class ItemDaoImpl implements ItemDao {
     }
 
     @Override
-    public Item delete(Item item) {
-        Storage.items.remove(item);
-        return item;
-    }
-
-    @Override
     public List<Item> getAll() {
         List<Item> allItems = Storage.items.stream()
                 .distinct()

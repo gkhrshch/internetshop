@@ -1,16 +1,20 @@
 package mate.academy.internetshop.model;
 
-import mate.academy.internetshop.IdGenerator;
-
 public class Item implements Comparable<Item> {
-    private final Long id;
+    private Long id;
     private String name;
     private Double price;
 
     public Item(String name, Double price) {
-        this.id = IdGenerator.getItemId();
         this.name = name;
         this.price = price;
+    }
+
+    public Item(Long id) {
+        this.id = id;
+    }
+
+    public Item() {
     }
 
     public Long getId() {

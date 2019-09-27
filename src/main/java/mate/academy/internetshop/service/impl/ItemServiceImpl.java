@@ -1,5 +1,6 @@
 package mate.academy.internetshop.service.impl;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import mate.academy.internetshop.dao.ItemDao;
@@ -15,7 +16,7 @@ public class ItemServiceImpl implements ItemService {
     private static ItemDao itemDao;
 
     @Override
-    public Item create(Item item) {
+    public Item create(Item item) throws SQLException {
         return itemDao.create(item);
     }
 
@@ -25,7 +26,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<Item> getAllItems() {
+    public List<Item> getAllItems() throws SQLException {
         return itemDao.getAll();
     }
 
@@ -37,10 +38,5 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public Item delete(Long id) {
         return itemDao.delete(id);
-    }
-
-    @Override
-    public Item delete(Item item) {
-        return itemDao.delete(item);
     }
 }

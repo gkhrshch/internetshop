@@ -1,6 +1,7 @@
 package mate.academy.internetshop.controller;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -30,7 +31,12 @@ public class BucketAddItemController extends HttpServlet {
         Bucket bucket = user.getBucket();
         String itemId = req.getParameter("item_id");
         bucketService.addItem(bucket.getId(), Long.parseLong(itemId));
-        List<Item> items = itemService.getAllItems();
+        List<Item> items = null;
+        try {
+            items = itemService.getAllItems();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         req.setAttribute("item", items);
         req.getRequestDispatcher("/WEB-INF/views/allItems.jsp").forward(req, resp);
     }

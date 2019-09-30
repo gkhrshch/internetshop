@@ -10,9 +10,11 @@ import mate.academy.internetshop.lib.Service;
 import mate.academy.internetshop.model.Bucket;
 import mate.academy.internetshop.model.Item;
 import mate.academy.internetshop.service.BucketService;
+import org.apache.log4j.Logger;
 
 @Service
 public class BucketServiceImpl implements BucketService {
+    private static Logger logger = Logger.getLogger(BucketServiceImpl.class);
 
     @Inject
     private static BucketDao bucketDao;

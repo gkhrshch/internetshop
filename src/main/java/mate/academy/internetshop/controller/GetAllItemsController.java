@@ -12,8 +12,11 @@ import javax.servlet.http.HttpServletResponse;
 import mate.academy.internetshop.lib.Inject;
 import mate.academy.internetshop.model.Item;
 import mate.academy.internetshop.service.ItemService;
+import org.apache.log4j.Logger;
 
 public class GetAllItemsController extends HttpServlet {
+    private static Logger logger = Logger.getLogger(GetAllItemsController.class);
+
     @Inject
     private static ItemService itemService;
 
@@ -21,11 +24,8 @@ public class GetAllItemsController extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         List<Item> items = null;
-        try {
-            items = itemService.getAllItems();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        items = itemService.getAllItems();
+
         List<Item> allItems = items.stream()
                 .distinct()
                 .collect(Collectors.toList());

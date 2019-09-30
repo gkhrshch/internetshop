@@ -8,16 +8,23 @@ import mate.academy.internetshop.lib.Inject;
 import mate.academy.internetshop.lib.Service;
 import mate.academy.internetshop.model.Item;
 import mate.academy.internetshop.service.ItemService;
+import org.apache.log4j.Logger;
 
 @Service
 public class ItemServiceImpl implements ItemService {
+    private static Logger logger = Logger.getLogger(ItemServiceImpl.class);
 
     @Inject
     private static ItemDao itemDao;
 
     @Override
-    public Item create(Item item) throws SQLException {
-        return itemDao.create(item);
+    public Item create(Item item) {
+        try {
+            return itemDao.create(item);
+        } catch(SQLException e) {
+            logger.warn("Item creation failed", e);
+        }
+        return null;
     }
 
     @Override
@@ -26,8 +33,13 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<Item> getAllItems() throws SQLException {
-        return itemDao.getAll();
+    public List<Item> getAllItems(){
+        try {
+            return itemDao.getAll();
+        } catch (SQLException e) {
+            logger.warn("Get all items failed", e);
+        }
+        return null;
     }
 
     @Override

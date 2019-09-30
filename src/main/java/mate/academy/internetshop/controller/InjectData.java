@@ -32,13 +32,10 @@ public class InjectData extends HttpServlet {
         Item item1 = new Item("hleb", 1.11);
         Item item2 = new Item("arbuz", 2.22);
         Item item3 = new Item("mivina", 3.33);
-        try {
-            itemService.create(item1);
-            itemService.create(item2);
-            itemService.create(item3);
-        } catch (SQLException e) {
-            logger.warn("inject failed", e);
-        }
+        itemService.create(item1);
+        itemService.create(item2);
+        itemService.create(item3);
+
     }
 
     @Override

@@ -28,6 +28,24 @@ public class ItemDaoJdbcImpl extends AbstractDao<Item> implements ItemDao {
                 + item.getName() + "', " + item.getPrice() + ");";
         try {
             statement = connection.createStatement();
+            statement.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
+        } catch (SQLException e) {
+            logger.warn(e);
+        }
+
+        try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+            if (generatedKeys.next()) {
+                item.setId(generatedKeys.getLong(1));
+            }
+            else {
+                throw new SQLException("Item add failed, no ID obtained.");
+            }
+        } catch (SQLException e) {
+            logger.warn(e);
+        }
+
+        try {
+            statement = connection.createStatement();
             statement.executeUpdate(query);
         } catch (SQLException e) {
             logger.warn("Item add failed", e);
@@ -74,12 +92,12 @@ public class ItemDaoJdbcImpl extends AbstractDao<Item> implements ItemDao {
     }
 
     @Override
-    public Item update(Item toUpdate) {
-        Item item = get(toUpdate.getId());
+    public Item update(Item item) {
+        Item toReturn = get(item.getId());
         Statement statement = null;
         String query = "UPDATE `" + DB_NAME
-                + "`.`items` + SET name='" + toUpdate.getName()
-                + "' WHERE item_id=" + toUpdate.getId();
+                + "`.`items` + SET name='" + item.getName()
+                + "' WHERE item_id=" + item.getId();
         try {
             statement = connection.createStatement();
             statement.executeUpdate(query);
@@ -94,7 +112,7 @@ public class ItemDaoJdbcImpl extends AbstractDao<Item> implements ItemDao {
                 }
             }
         }
-        return item;
+        return toReturn;
     }
 
     @Override

@@ -6,11 +6,11 @@ import mate.academy.internetshop.model.Item;
 
 public interface ItemService {
 
-    Item create(Item item) throws SQLException;
+    Item create(Item item);
 
     Item get(Long id);
 
-    List<Item> getAllItems() throws SQLException;
+    List<Item> getAllItems();
 
     Item update(Item item);
 

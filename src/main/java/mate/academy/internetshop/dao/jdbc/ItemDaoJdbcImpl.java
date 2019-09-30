@@ -43,21 +43,6 @@ public class ItemDaoJdbcImpl extends AbstractDao<Item> implements ItemDao {
         } catch (SQLException e) {
             logger.warn(e);
         }
-
-        try {
-            statement = connection.createStatement();
-            statement.executeUpdate(query);
-        } catch (SQLException e) {
-            logger.warn("Item add failed", e);
-        } finally {
-            if (statement != null) {
-                try {
-                    statement.close();
-                } catch (SQLException e) {
-                    logger.warn("Can't close statement", e);
-                }
-            }
-        }
         return item;
     }
 

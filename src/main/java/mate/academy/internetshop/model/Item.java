@@ -8,7 +8,6 @@ public class Item implements Comparable<Item> {
     public Item(String name, Double price) {
         this.name = name;
         this.price = price;
-        //this.id
     }
 
     public Item(Long id) {

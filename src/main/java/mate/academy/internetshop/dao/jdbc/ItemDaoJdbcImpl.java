@@ -21,7 +21,7 @@ public class ItemDaoJdbcImpl extends AbstractDao<Item> implements ItemDao {
     }
 
     @Override
-    public Item create(Item item) throws SQLException {
+    public Item create(Item item){
         Statement statement = null;
         String query = "INSERT INTO " + DB_NAME
                 + ".items (`name`, `price`) VALUES ( '"
@@ -124,7 +124,7 @@ public class ItemDaoJdbcImpl extends AbstractDao<Item> implements ItemDao {
     }
 
     @Override
-    public List<Item> getAll() throws SQLException {
+    public List<Item> getAll(){
         List<Item> items = new ArrayList<>();
         Statement statement = null;
         String query = "SELECT * FROM `" + DB_NAME + "`.`items`;";
@@ -141,6 +141,8 @@ public class ItemDaoJdbcImpl extends AbstractDao<Item> implements ItemDao {
                 items.add(item);
             }
             return items;
+        } catch (SQLException e) {
+            logger.warn("Can't get items list", e);
         } finally {
             if (statement != null) {
                 try {
@@ -150,5 +152,6 @@ public class ItemDaoJdbcImpl extends AbstractDao<Item> implements ItemDao {
                 }
             }
         }
+        return items;
     }
 }

@@ -19,12 +19,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public Item create(Item item) {
-        try {
-            return itemDao.create(item);
-        } catch(SQLException e) {
-            logger.warn("Item creation failed", e);
-        }
-        return null;
+        return itemDao.create(item);
     }
 
     @Override
@@ -34,12 +29,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<Item> getAllItems(){
-        try {
-            return itemDao.getAll();
-        } catch (SQLException e) {
-            logger.warn("Get all items failed", e);
-        }
-        return null;
+        return itemDao.getAll();
     }
 
     @Override

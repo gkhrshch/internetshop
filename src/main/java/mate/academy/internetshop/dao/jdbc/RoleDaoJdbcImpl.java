@@ -22,31 +22,6 @@ public class RoleDaoJdbcImpl extends AbstractDao<Role> implements RoleDao {
     }
 
     @Override
-    public void addRole(User user) {
-        String role = user.getRoles().stream().findFirst().get().getRoleName().toString();
-        Long userId = user.getId();
-        String getRoleIdQuery = "SELECT * FROM "
-                + DB_NAME + ".roles WHERE role_name = ?;";
-        String addRoleQuery = "INSERT INTO "
-                + DB_NAME + ".roles_users (role_id, user_id) VALUES (?, ?);";
-        try (PreparedStatement getRoleIdStmt = connection.prepareStatement(getRoleIdQuery);
-                 PreparedStatement addRoleStmt
-                         = connection.prepareStatement(addRoleQuery)) {
-            getRoleIdStmt.setString(1, role);
-            ResultSet resultSet = getRoleIdStmt.executeQuery();
-            Long roleId = null;
-            if (resultSet.next()) {
-                roleId = resultSet.getLong("role_id");
-            }
-            addRoleStmt.setLong(1, roleId);
-            addRoleStmt.setLong(2, userId);
-            addRoleStmt.executeUpdate();
-        } catch (SQLException e) {
-            logger.error("Can't add Role", e);
-        }
-    }
-
-    @Override
     public Set<Role> getRoles(User user) {
         Set<Role> roles = new HashSet<>();
         String query = "SELECT internetshop.roles.role_name "

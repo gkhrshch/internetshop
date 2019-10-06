@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import mate.academy.internetshop.dao.BucketDao;
-import mate.academy.internetshop.dao.RoleDao;
 import mate.academy.internetshop.dao.UserDao;
 import mate.academy.internetshop.exceptions.AuthenticationException;
 import mate.academy.internetshop.lib.Dao;
@@ -25,8 +24,6 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
 
     @Inject
     private static BucketDao bucketDao;
-    @Inject
-    private static RoleDao roleDao;
 
     public UserDaoJdbcImpl(Connection connection) {
         super(connection);
@@ -51,13 +48,38 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
                     throw new SQLException("Add user failed, no ID obtained.");
                 }
                 bucketDao.create(new Bucket(user.getId()));
-                roleDao.addRole(user);
+                addRole(user);
             }
         } catch (SQLException e) {
             logger.error("Can't create user", e);
             return null;
         }
         return user;
+    }
+
+    @Override
+    public void addRole(User user) {
+        String role = user.getRoles().stream().findFirst().get().getRoleName().toString();
+        Long userId = user.getId();
+        String getRoleIdQuery = "SELECT * FROM "
+                + DB_NAME + ".roles WHERE role_name = ?;";
+        String addRoleQuery = "INSERT INTO "
+                + DB_NAME + ".roles_users (role_id, user_id) VALUES (?, ?);";
+        try (PreparedStatement getRoleIdStmt = connection.prepareStatement(getRoleIdQuery);
+                 PreparedStatement addRoleStmt
+                         = connection.prepareStatement(addRoleQuery)) {
+            getRoleIdStmt.setString(1, role);
+            ResultSet resultSetCreate = getRoleIdStmt.executeQuery();
+            Long roleId = null;
+            if (resultSetCreate.next()) {
+                roleId = resultSetCreate.getLong("role_id");
+            }
+            addRoleStmt.setLong(1, roleId);
+            addRoleStmt.setLong(2, userId);
+            addRoleStmt.executeUpdate();
+        } catch (SQLException e) {
+            logger.error("Can't add Role", e);
+        }
     }
 
     @Override
@@ -115,18 +137,14 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
 
     @Override
     public List<User> getAll() {
+        User user = null;
         List<User> users = new ArrayList<>();
         String query = "SELECT * FROM " + DB_NAME + ".users;";
         try (PreparedStatement statement
                      = connection.prepareStatement(query)) {
             ResultSet resultSet = statement.executeQuery(query);
             while (resultSet.next()) {
-                User user = new User();
-                user.setId(resultSet.getLong("user_id"));
-                user.setName(resultSet.getString("name"));
-                user.setSurname(resultSet.getString("surname"));
-                user.setLogin(resultSet.getString("login"));
-                user.setToken(resultSet.getString("token"));
+                user = getUserFromResultSet(resultSet);
                 users.add(user);
             }
             return users;
@@ -138,19 +156,14 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
 
     @Override
     public Optional<User> login(String login, String password) throws AuthenticationException {
-        User user = null;
+        User user = new User();
         String query = "SELECT * FROM " + DB_NAME + ".users WHERE login=? AND password=?;";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, login);
             statement.setString(2, password);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                user = new User();
-                user.setId(resultSet.getLong("user_id"));
-                user.setName(resultSet.getString("name"));
-                user.setSurname(resultSet.getString("surname"));
-                user.setLogin(resultSet.getString("login"));
-                user.setToken(resultSet.getString("token"));
+                user = getUserFromResultSet(resultSet);
             } else {
                 throw new AuthenticationException("Incorrect login or password");
             }
@@ -162,23 +175,25 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
 
     @Override
     public Optional<User> getByToken(String token) {
-        User user = null;
+        User user = new User();
         String query = "SELECT * FROM " + DB_NAME + ".users WHERE token=?;";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, token);
             ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                user = new User();
-                user.setId(resultSet.getLong("user_id"));
-                user.setName(resultSet.getString("name"));
-                user.setSurname(resultSet.getString("surname"));
-                user.setLogin(resultSet.getString("login"));
-                user.setPassword(resultSet.getString("password"));
-                user.setToken(resultSet.getString("token"));
-            }
+            user = getUserFromResultSet(resultSet);
         } catch (SQLException e) {
             logger.error("Can't get user by token", e);
         }
         return Optional.of(user);
+    }
+
+    private  User getUserFromResultSet(ResultSet resultSet) throws SQLException {
+            User user = new User();
+            user.setId(resultSet.getLong("user_id"));
+            user.setName(resultSet.getString("name"));
+            user.setSurname(resultSet.getString("surname"));
+            user.setLogin(resultSet.getString("login"));
+            user.setToken(resultSet.getString("token"));
+            return user;
     }
 }

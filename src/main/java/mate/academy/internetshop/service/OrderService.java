@@ -14,7 +14,7 @@ public interface OrderService {
 
     Order update(Order order);
 
-    Order delete(Long id);
+    void delete(Long id);
 
     Order completeOrder(List<Item> items, Long userId);
 

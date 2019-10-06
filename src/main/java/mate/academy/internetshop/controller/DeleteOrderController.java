@@ -26,6 +26,6 @@ public class DeleteOrderController extends HttpServlet {
         List<Order> userOrders = userService.getOrders(userId);
         userOrders.remove(toDelete);
         orderService.delete(orderId);
-        req.getRequestDispatcher("/WEB-INF/views/orders.jsp").forward(req, resp);
+        resp.sendRedirect(req.getContextPath() + "/servlet/orderAccess");
     }
 }

@@ -102,16 +102,22 @@ public class OrderDaoJdbcImpl extends AbstractDao<Order> implements OrderDao {
     }
 
     @Override
-    public Order delete(Long id) {
-        //TODO: add delete orders_items rows query
-        String query = "DELETE FROM " + DB_NAME + ".orders WHERE order_id = ?;";
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setLong(1, id);
-            statement.executeUpdate();
+    public void delete(Long id) {
+        String deleteOrdersItemsQuery = "DELETE FROM "
+                + DB_NAME + ".orders_items WHERE order_id = ?;";
+        String deleteOrdersQuery = "DELETE FROM "
+                + DB_NAME + ".orders WHERE order_id = ?;";
+        try (PreparedStatement ordersItemsStmt
+                     = connection.prepareStatement(deleteOrdersItemsQuery);
+                 PreparedStatement ordersStmt
+                         = connection.prepareStatement(deleteOrdersQuery)) {
+            ordersItemsStmt.setLong(1, id);
+            ordersStmt.setLong(1, id);
+            ordersItemsStmt.executeUpdate();
+            ordersStmt.executeUpdate();
         } catch (SQLException e) {
             logger.error("Can't delete order with id = " + id, e);
         }
-        return get(id).get();
     }
 
     @Override

@@ -11,7 +11,7 @@ public interface UserDao {
 
     User create(User user);
 
-    void addRole(User user);
+    void addRoles(User user);
 
     Optional<User> get(Long id);
 

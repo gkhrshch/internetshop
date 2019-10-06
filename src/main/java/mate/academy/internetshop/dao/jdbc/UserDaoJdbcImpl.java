@@ -8,12 +8,14 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import mate.academy.internetshop.dao.BucketDao;
 import mate.academy.internetshop.dao.UserDao;
 import mate.academy.internetshop.exceptions.AuthenticationException;
 import mate.academy.internetshop.lib.Dao;
 import mate.academy.internetshop.lib.Inject;
 import mate.academy.internetshop.model.Bucket;
+import mate.academy.internetshop.model.Role;
 import mate.academy.internetshop.model.User;
 import org.apache.log4j.Logger;
 
@@ -48,7 +50,7 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
                     throw new SQLException("Add user failed, no ID obtained.");
                 }
                 bucketDao.create(new Bucket(user.getId()));
-                addRole(user);
+                addRoles(user);
             }
         } catch (SQLException e) {
             logger.error("Can't create user", e);
@@ -58,9 +60,7 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
     }
 
     @Override
-    public void addRole(User user) {
-        String role = user.getRoles().stream().findFirst().get().getRoleName().toString();
-        Long userId = user.getId();
+    public void addRoles(User user) {
         String getRoleIdQuery = "SELECT * FROM "
                 + DB_NAME + ".roles WHERE role_name = ?;";
         String addRoleQuery = "INSERT INTO "
@@ -68,15 +68,18 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
         try (PreparedStatement getRoleIdStmt = connection.prepareStatement(getRoleIdQuery);
                  PreparedStatement addRoleStmt
                          = connection.prepareStatement(addRoleQuery)) {
-            getRoleIdStmt.setString(1, role);
-            ResultSet resultSetCreate = getRoleIdStmt.executeQuery();
-            Long roleId = null;
-            if (resultSetCreate.next()) {
-                roleId = resultSetCreate.getLong("role_id");
+            Set<Role> roles = user.getRoles();
+            for (Role role: roles) {
+                getRoleIdStmt.setString(1, String.valueOf(role.getRoleName()));
+                ResultSet resultSetCreate = getRoleIdStmt.executeQuery();
+                Long roleId = null;
+                if (resultSetCreate.next()) {
+                    roleId = resultSetCreate.getLong("role_id");
+                }
+                addRoleStmt.setLong(1, roleId);
+                addRoleStmt.setLong(2, user.getId());
+                addRoleStmt.executeUpdate();
             }
-            addRoleStmt.setLong(1, roleId);
-            addRoleStmt.setLong(2, userId);
-            addRoleStmt.executeUpdate();
         } catch (SQLException e) {
             logger.error("Can't add Role", e);
         }
@@ -180,7 +183,9 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, token);
             ResultSet resultSet = statement.executeQuery();
-            user = getUserFromResultSet(resultSet);
+            if (resultSet.next()) {
+                user = getUserFromResultSet(resultSet);
+            }
         } catch (SQLException e) {
             logger.error("Can't get user by token", e);
         }
@@ -188,12 +193,12 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
     }
 
     private  User getUserFromResultSet(ResultSet resultSet) throws SQLException {
-            User user = new User();
-            user.setId(resultSet.getLong("user_id"));
-            user.setName(resultSet.getString("name"));
-            user.setSurname(resultSet.getString("surname"));
-            user.setLogin(resultSet.getString("login"));
-            user.setToken(resultSet.getString("token"));
-            return user;
+        User user = new User();
+        user.setId(resultSet.getLong("user_id"));
+        user.setName(resultSet.getString("name"));
+        user.setSurname(resultSet.getString("surname"));
+        user.setLogin(resultSet.getString("login"));
+        user.setToken(resultSet.getString("token"));
+        return user;
     }
 }

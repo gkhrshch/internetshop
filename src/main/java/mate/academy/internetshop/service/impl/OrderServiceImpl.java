@@ -34,8 +34,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order delete(Long id) {
-        return orderDao.delete(id);
+    public void delete(Long id) {
+        orderDao.delete(id);
     }
 
     @Override

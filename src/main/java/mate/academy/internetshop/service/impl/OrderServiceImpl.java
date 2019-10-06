@@ -25,7 +25,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order get(Long id) {
-        return orderDao.get(id);
+        return orderDao.get(id).get();
     }
 
     @Override
@@ -41,7 +41,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Order completeOrder(List<Item> items, Long userId) {
         Order order = new Order(userId, items);
-        userDao.get(userId).getOrders().add(order);
+        userDao.get(userId).get().getOrders().add(order);
         orderDao.create(order);
         return order;
     }
@@ -49,8 +49,6 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Order completeOrder(Bucket bucket) {
         Order order = new Order(bucket.getUserId(), bucket.getItems());
-        userDao.get(bucket.getUserId()).getOrders().add(order);
-        orderDao.create(order);
-        return order;
+        return orderDao.create(order);
     }
 }

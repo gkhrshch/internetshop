@@ -2,21 +2,29 @@ package mate.academy.internetshop.model;
 
 import java.util.ArrayList;
 import java.util.List;
-import mate.academy.internetshop.IdGenerator;
 
 public class Bucket {
-    private final Long id;
+    private Long id;
     private List<Item> items;
-    private final Long userId;
+    private  Long userId;
 
     public Bucket(Long userId) {
-        this.id = IdGenerator.getBucketId();
         this.userId = userId;
         this.items = new ArrayList<>();
     }
 
+    public Bucket() {}
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public Long getId() {
         return id;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public Long getUserId() {

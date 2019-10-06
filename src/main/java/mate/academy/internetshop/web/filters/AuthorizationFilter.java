@@ -16,6 +16,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import mate.academy.internetshop.dao.RoleDao;
 import mate.academy.internetshop.lib.Inject;
 import mate.academy.internetshop.model.Role;
 import mate.academy.internetshop.model.User;
@@ -28,6 +29,8 @@ public class AuthorizationFilter implements Filter {
 
     @Inject
     private static UserService userService;
+    @Inject
+    private static RoleDao roleDao;
 
     private Map<String, Role.RoleName> protectedUrls = new HashMap<>();
 
@@ -77,7 +80,7 @@ public class AuthorizationFilter implements Filter {
             Optional<User> user = userService.getByToken(token);
             if (user.isPresent()) {
                 if (verifyRole(user.get(), roleName)) {
-                    logger.info("Role: " + user.get().getRoles().toString());
+                    logger.info("Role: " + roleDao.getRoles(user.get()).toString());
                     processAuthenticated(filterChain, req, resp);
                     return;
                 } else {
@@ -92,7 +95,7 @@ public class AuthorizationFilter implements Filter {
     }
 
     private boolean verifyRole(User user, Role.RoleName roleName) {
-        return user.getRoles().stream()
+        return roleDao.getRoles(user).stream()
                 .anyMatch(r -> r.getRoleName().equals(roleName));
     }
 

@@ -10,7 +10,7 @@ public interface UserService {
 
     User create(User user);
 
-    User get(Long id);
+    Optional<User> get(Long id);
 
     User update(User user);
 
@@ -20,7 +20,7 @@ public interface UserService {
 
     List<User> getAllUsers();
 
-    User login(String login, String password) throws AuthenticationException;
+    Optional<User> login(String login, String password) throws AuthenticationException;
 
     Optional<User> getByToken(String token);
 }

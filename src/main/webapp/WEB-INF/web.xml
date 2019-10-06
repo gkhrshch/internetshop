@@ -14,6 +14,15 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>inject</servlet-name>
+        <servlet-class>mate.academy.internetshop.controller.InjectData</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>inject</servlet-name>
+        <url-pattern>/inject</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>getAllItems</servlet-name>
         <servlet-class>mate.academy.internetshop.controller.GetAllItemsController</servlet-class>
     </servlet>
@@ -119,15 +128,6 @@
     <servlet-mapping>
         <servlet-name>logoutController</servlet-name>
         <url-pattern>/logout</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>injectDataController</servlet-name>
-        <servlet-class>mate.academy.internetshop.controller.InjectData</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>injectDataController</servlet-name>
-        <url-pattern>/inject</url-pattern>
     </servlet-mapping>
 
     <filter>

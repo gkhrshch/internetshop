@@ -1,8 +1,6 @@
 package mate.academy.internetshop.controller;
 
 import java.io.IOException;
-import java.sql.SQLException;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.servlet.ServletException;
@@ -27,9 +25,7 @@ public class GetAllItemsController extends HttpServlet {
         items = itemService.getAllItems();
 
         List<Item> allItems = items.stream()
-                .distinct()
-                .collect(Collectors.toList());
-        Collections.sort(allItems);
+                .distinct().sorted().collect(Collectors.toList());
         req.setAttribute("item", allItems);
         req.getRequestDispatcher("/WEB-INF/views/allItems.jsp").forward(req, resp);
     }

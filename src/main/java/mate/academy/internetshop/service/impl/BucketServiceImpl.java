@@ -1,7 +1,6 @@
 package mate.academy.internetshop.service.impl;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import mate.academy.internetshop.dao.BucketDao;
 import mate.academy.internetshop.dao.ItemDao;
@@ -29,7 +28,7 @@ public class BucketServiceImpl implements BucketService {
 
     @Override
     public Bucket get(Long id) {
-        Bucket bucket = bucketDao.get(id);
+        Bucket bucket = bucketDao.get(id).get();
         return bucket;
     }
 
@@ -46,32 +45,29 @@ public class BucketServiceImpl implements BucketService {
 
     @Override
     public Bucket addItem(Long bucketId, Long itemId) {
-        Bucket bucket = bucketDao.get(bucketId);
-        Item item = itemDao.get(itemId);
-        bucket.getItems().add(item);
+        Bucket bucket = bucketDao.get(bucketId).get();
+        bucketDao.addItem(bucketId, itemId);
         return bucketDao.update(bucket);
     }
 
     @Override
     public Bucket removeItem(Long bucketId, Long itemId) {
-        Bucket bucket = bucketDao.get(bucketId);
-        Item item = itemDao.get(itemId);
-        bucket.getItems().stream()
-                .filter(i -> i.getId().equals(itemId))
-                .findFirst()
-                .orElseThrow(() -> new NoSuchElementException(
-                "Can't find item with id " + itemId));
-        bucket.getItems().remove(item);
+        Bucket bucket = bucketDao.get(bucketId).get();
+        bucketDao.removeItem(bucketId, itemId);
         return bucketDao.update(bucket);
     }
 
     public Bucket clear(Long bucketId) {
-        Bucket bucket = bucketDao.get(bucketId);
-        bucket.getItems().clear();
-        return bucket;
+        bucketDao.clear(bucketId);
+        return bucketDao.update(bucketDao.get(bucketId).get());
     }
 
     public List<Item> getAllItems(Bucket bucket) {
-        return bucketDao.get(bucket.getId()).getItems();
+        return bucketDao.get(bucket.getId()).get().getItems();
+    }
+
+    @Override
+    public Bucket getBucketByUserId(Long userId) {
+        return bucketDao.getBucketByUserId(userId).get();
     }
 }

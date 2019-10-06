@@ -11,7 +11,7 @@ public interface UserDao {
 
     User create(User user);
 
-    User get(Long id);
+    Optional<User> get(Long id);
 
     User update(User user);
 
@@ -19,7 +19,7 @@ public interface UserDao {
 
     List<User> getAll();
 
-    User login(String login, String password) throws AuthenticationException;
+    Optional<User> login(String login, String password) throws AuthenticationException;
 
     Optional<User> getByToken(String token);
 }

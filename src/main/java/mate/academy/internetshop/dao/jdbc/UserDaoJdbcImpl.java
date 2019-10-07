@@ -6,10 +6,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import mate.academy.internetshop.dao.BucketDao;
+import mate.academy.internetshop.dao.RoleDao;
 import mate.academy.internetshop.dao.UserDao;
 import mate.academy.internetshop.exceptions.AuthenticationException;
 import mate.academy.internetshop.lib.Dao;
@@ -26,6 +28,8 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
 
     @Inject
     private static BucketDao bucketDao;
+    @Inject
+    private static RoleDao roleDao;
 
     public UserDaoJdbcImpl(Connection connection) {
         super(connection);
@@ -50,7 +54,7 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
                     throw new SQLException("Add user failed, no ID obtained.");
                 }
                 bucketDao.create(new Bucket(user.getId()));
-                addRoles(user);
+                addRoles(user, user.getRoles());
             }
         } catch (SQLException e) {
             logger.error("Can't create user", e);
@@ -59,8 +63,10 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
         return user;
     }
 
+
+
     @Override
-    public void addRoles(User user) {
+    public void addRoles(User user, Set<Role> roles) {
         String getRoleIdQuery = "SELECT * FROM "
                 + DB_NAME + ".roles WHERE role_name = ?;";
         String addRoleQuery = "INSERT INTO "
@@ -68,7 +74,6 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
         try (PreparedStatement getRoleIdStmt = connection.prepareStatement(getRoleIdQuery);
                  PreparedStatement addRoleStmt
                          = connection.prepareStatement(addRoleQuery)) {
-            Set<Role> roles = user.getRoles();
             for (Role role: roles) {
                 getRoleIdStmt.setString(1, String.valueOf(role.getRoleName()));
                 ResultSet resultSetCreate = getRoleIdStmt.executeQuery();
@@ -199,6 +204,7 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
         user.setSurname(resultSet.getString("surname"));
         user.setLogin(resultSet.getString("login"));
         user.setToken(resultSet.getString("token"));
+        user.setRoles(roleDao.getRoles(get(user.getId()).get()));
         return user;
     }
 }

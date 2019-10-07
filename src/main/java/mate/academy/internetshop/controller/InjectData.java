@@ -1,7 +1,6 @@
 package mate.academy.internetshop.controller;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -16,7 +15,10 @@ import mate.academy.internetshop.service.OrderService;
 import mate.academy.internetshop.service.UserService;
 import org.apache.log4j.Logger;
 
+//TODO: Inject test data does not work properly at the moment,
+// mock test data manually with SQL scripts
 public class InjectData extends HttpServlet {
+
     @Inject
     private static UserService userService;
     @Inject
@@ -29,18 +31,19 @@ public class InjectData extends HttpServlet {
     private static Logger logger = Logger.getLogger(InjectData.class);
 
     public static void injectData() throws IllegalAccessException {
-        Item item1 = new Item("hleb", 1.11);
-        Item item2 = new Item("arbuz", 2.22);
-        Item item3 = new Item("mivina", 3.33);
-        itemService.create(item1);
-        itemService.create(item2);
-        itemService.create(item3);
-
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
+
+        Item item1 = new Item("item1", 1.11);
+        Item item2 = new Item("item2", 2.22);
+        Item item3 = new Item("item3", 3.33);
+        itemService.create(item1);
+        itemService.create(item2);
+        itemService.create(item3);
+
         User user = new User();
         user.setName("1");
         user.setSurname("1");
@@ -56,7 +59,6 @@ public class InjectData extends HttpServlet {
         admin.setLogin("admin");
         admin.setPassword("admin");
         userService.create(admin);
-
         resp.sendRedirect(req.getContextPath() + "/servlet/index");
     }
 }

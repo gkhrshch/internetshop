@@ -1,7 +1,6 @@
 package mate.academy.internetshop.controller;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -27,8 +26,8 @@ public class BucketAddItemController extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         Long userId = (Long) req.getSession(true).getAttribute("userId");
-        User user = userService.get(userId);
-        Bucket bucket = user.getBucket();
+        User user = userService.get(userId).get();
+        Bucket bucket = bucketService.getBucketByUserId(userId);
         String itemId = req.getParameter("item_id");
         bucketService.addItem(bucket.getId(), Long.parseLong(itemId));
         List<Item> items = null;

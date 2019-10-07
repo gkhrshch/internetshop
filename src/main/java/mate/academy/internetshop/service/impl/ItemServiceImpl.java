@@ -1,8 +1,6 @@
 package mate.academy.internetshop.service.impl;
 
-import java.sql.SQLException;
 import java.util.List;
-
 import mate.academy.internetshop.dao.ItemDao;
 import mate.academy.internetshop.lib.Inject;
 import mate.academy.internetshop.lib.Service;
@@ -24,11 +22,11 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public Item get(Long id) {
-        return itemDao.get(id);
+        return itemDao.get(id).get();
     }
 
     @Override
-    public List<Item> getAllItems(){
+    public List<Item> getAllItems() {
         return itemDao.getAll();
     }
 

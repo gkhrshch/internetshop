@@ -20,7 +20,7 @@ public class OrdersAccessContoller extends HttpServlet {
             throws ServletException, IOException {
         Long userId = (Long) req.getSession(true).getAttribute("userId");
         List<Order> orders = userService.getOrders(userId);
-        req.setAttribute("name", userService.get(userId).getName());
+        req.setAttribute("name", userService.get(userId).get().getName());
         req.setAttribute("orders", orders);
         req.getRequestDispatcher("/WEB-INF/views/orders.jsp").forward(req, resp);
     }

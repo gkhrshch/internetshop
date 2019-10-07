@@ -29,7 +29,7 @@ public class LoginController extends HttpServlet {
         String login = req.getParameter("login");
         String password = req.getParameter("psw");
         try {
-            User user = userService.login(login, password);
+            User user = userService.login(login, password).get();
 
             HttpSession session = req.getSession(true);
             session.setAttribute("userId", user.getId());

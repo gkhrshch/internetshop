@@ -16,6 +16,8 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import mate.academy.internetshop.dao.RoleDao;
+import mate.academy.internetshop.dao.UserDao;
 import mate.academy.internetshop.lib.Inject;
 import mate.academy.internetshop.model.Role;
 import mate.academy.internetshop.model.User;
@@ -28,6 +30,10 @@ public class AuthorizationFilter implements Filter {
 
     @Inject
     private static UserService userService;
+    @Inject
+    private static UserDao userDao;
+    @Inject
+    private static RoleDao roleDao;
 
     private Map<String, Role.RoleName> protectedUrls = new HashMap<>();
 

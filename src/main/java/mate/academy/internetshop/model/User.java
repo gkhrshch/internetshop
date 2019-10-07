@@ -5,16 +5,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import mate.academy.internetshop.IdGenerator;
-
 public class User {
-    private final Long id;
+    private Long id;
     private String name;
     private String surname;
     private String login;
     private String password;
     private String token;
-    private Bucket bucket;
     private List<Order> orders;
     private Set<Role> roles = new HashSet<>();
 
@@ -31,13 +28,21 @@ public class User {
     }
 
     public User() {
-        this.id = IdGenerator.getUserId();
         this.orders = new ArrayList<>();
-        this.bucket = new Bucket(this.id);
+    }
+
+    public User(Long id, String login, String password) {
+        this.id = id;
+        this.login = login;
+        this.password = password;
     }
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -78,14 +83,6 @@ public class User {
 
     public void setToken(String token) {
         this.token = token;
-    }
-
-    public Bucket getBucket() {
-        return bucket;
-    }
-
-    public void setBucket(Bucket bucket) {
-        this.bucket = bucket;
     }
 
     public List<Order> getOrders() {

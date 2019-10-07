@@ -22,10 +22,10 @@ public class BucketRemoveItemController extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         Long userId = (Long) req.getSession(true).getAttribute("userId");
-        Bucket bucket = userService.get(userId).getBucket();
+        Bucket bucket = bucketService.getBucketByUserId(userId);
         String itemId = req.getParameter("item_id");
         bucketService.removeItem(bucket.getId(), Long.parseLong(itemId));
-        req.setAttribute("user", userService.get(userId).getName());
+        req.setAttribute("user", userService.get(userId).get().getName());
         List<Item> items = bucketService.getAllItems(bucket);
         req.setAttribute("item", items);
         req.getRequestDispatcher("/WEB-INF/views/bucketAccess.jsp").forward(req, resp);

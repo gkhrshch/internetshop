@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -62,8 +61,6 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
         }
         return user;
     }
-
-
 
     @Override
     public void addRoles(User user, Set<Role> roles) {

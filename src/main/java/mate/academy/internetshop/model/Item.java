@@ -1,8 +1,21 @@
 package mate.academy.internetshop.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "items")
 public class Item implements Comparable<Item> {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "item_id", columnDefinition = "INTEGER")
     private Long id;
     private String name;
+    @Column(name = "price", columnDefinition = "DECIMAL")
     private Double price;
 
     public Item(String name, Double price) {

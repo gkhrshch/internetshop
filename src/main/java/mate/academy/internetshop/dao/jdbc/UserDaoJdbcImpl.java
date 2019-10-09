@@ -183,7 +183,8 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
     }
 
     private byte[] getSaltByLogin(String login) {
-        String query = "SELECT users.salt FROM users WHERE login = ?";
+        String query = "SELECT "+ DB_NAME + ".users.salt FROM "
+                + DB_NAME + ".users WHERE login = ?";
         byte[] salt = null;
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, login);

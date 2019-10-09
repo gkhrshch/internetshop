@@ -18,6 +18,7 @@ import mate.academy.internetshop.lib.Inject;
 import mate.academy.internetshop.model.Bucket;
 import mate.academy.internetshop.model.Role;
 import mate.academy.internetshop.model.User;
+import mate.academy.internetshop.util.HashUtil;
 import org.apache.log4j.Logger;
 
 @Dao
@@ -37,7 +38,7 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
     @Override
     public User create(User user) {
         String query = "INSERT INTO " + DB_NAME
-                + ".users (name, surname, login, password, token) VALUES (?, ?, ?, ?, ?);";
+                + ".users (name, surname, login, password, token, salt) VALUES (?, ?, ?, ?, ?, ?);";
         try (PreparedStatement statement
                      = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, user.getName());
@@ -45,6 +46,7 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
             statement.setString(3, user.getLogin());
             statement.setString(4, user.getPassword());
             statement.setString(5, user.getToken());
+            statement.setBytes(6, user.getSalt());
             statement.executeUpdate();
             try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
@@ -164,8 +166,10 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
         User user = new User();
         String query = "SELECT * FROM " + DB_NAME + ".users WHERE login=? AND password=?;";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
+            byte[] salt = getSaltByLogin(login);
+            String passwordToVerify = HashUtil.hashPassword(password, salt);
             statement.setString(1, login);
-            statement.setString(2, password);
+            statement.setString(2, passwordToVerify);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 user = getUserFromResultSet(resultSet);
@@ -176,6 +180,21 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
             logger.error("Can't get user by ID", e);
         }
         return Optional.of(user);
+    }
+
+    private byte[] getSaltByLogin(String login) {
+        String query = "SELECT users.salt FROM users WHERE login = ?";
+        byte[] salt = null;
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, login);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                salt = resultSet.getBytes("salt");
+            }
+        } catch (SQLException e) {
+            logger.error("Can't get user_id by login = " + login, e);
+        }
+        return salt;
     }
 
     @Override

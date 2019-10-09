@@ -17,11 +17,12 @@ create table users
 (
     user_id  int auto_increment
         primary key,
-    name     varchar(45) null,
-    surname  varchar(45) null,
-    login    varchar(45) not null,
-    password varchar(45) not null,
-    token    varchar(45) null
+    name     varchar(45)   null,
+    surname  varchar(45)   null,
+    login    varchar(45)   not null,
+    password varchar(1000) not null,
+    token    varchar(45)   null,
+    salt     blob          not null
 );
 
 create table buckets

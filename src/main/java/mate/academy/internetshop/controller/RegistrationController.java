@@ -11,6 +11,7 @@ import mate.academy.internetshop.lib.Inject;
 import mate.academy.internetshop.model.Role;
 import mate.academy.internetshop.model.User;
 import mate.academy.internetshop.service.UserService;
+import mate.academy.internetshop.util.HashUtil;
 
 public class RegistrationController extends HttpServlet {
     @Inject
@@ -29,6 +30,11 @@ public class RegistrationController extends HttpServlet {
         newUser.setName(req.getParameter("user_name"));
         newUser.setLogin(req.getParameter("login"));
         newUser.setPassword(req.getParameter("psw"));
+        String password = req.getParameter("psw");
+        byte[] salt = HashUtil.getSalt();
+        newUser.setSalt(salt);
+        String hashedPassword = HashUtil.hashPassword(password, salt);
+        newUser.setPassword(hashedPassword);
         newUser.setSurname(req.getParameter("user_surname"));
         newUser.addRole(Role.of("USER"));
         User user = userService.create(newUser);

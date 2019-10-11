@@ -1,19 +1,43 @@
 package mate.academy.internetshop.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+@Entity
+@Table(name = "users")
 public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     private Long id;
     private String name;
     private String surname;
     private String login;
     private String password;
+    @Column(columnDefinition = "blob")
+    private byte[] salt;
     private String token;
+    @Transient
     private List<Order> orders;
+    @ManyToMany
+    @JoinTable(name = "roles_users",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
+    @Transient
+    private Bucket bucket;
 
     public Set<Role> getRoles() {
         return roles;
@@ -27,8 +51,15 @@ public class User {
         roles.add(role);
     }
 
+    public Bucket getBucket() {
+        return bucket;
+    }
+
+    public void setBucket(Bucket bucket) {
+        this.bucket = bucket;
+    }
+
     public User() {
-        this.orders = new ArrayList<>();
     }
 
     public User(Long id, String login, String password) {
@@ -75,6 +106,14 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public byte[] getSalt() {
+        return salt;
+    }
+
+    public void setSalt(byte[] salt) {
+        this.salt = salt;
     }
 
     public String getToken() {

@@ -2,6 +2,8 @@ package mate.academy.internetshop.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -15,6 +17,7 @@ public class Role {
     @Column(name = "role_id", columnDefinition = "INTEGER")
     private Long id;
     @Column(name = "role_name", columnDefinition = "VARCHAR")
+    @Enumerated(EnumType.STRING)
     private RoleName roleName;
 
     public Role() {}

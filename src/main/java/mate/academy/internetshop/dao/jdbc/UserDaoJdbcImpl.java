@@ -166,7 +166,7 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
         User user = new User();
         String query = "SELECT * FROM " + DB_NAME + ".users WHERE login=? AND password=?;";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
-            byte[] salt = getSaltByLogin(login);
+            byte[] salt = getUserByLogin(login).get().getSalt();
             String passwordToVerify = HashUtil.hashPassword(password, salt);
             statement.setString(1, login);
             statement.setString(2, passwordToVerify);
@@ -182,20 +182,19 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
         return Optional.of(user);
     }
 
-    private byte[] getSaltByLogin(String login) {
-        String query = "SELECT "+ DB_NAME + ".users.salt FROM "
-                + DB_NAME + ".users WHERE login = ?";
-        byte[] salt = null;
+    private Optional<User> getUserByLogin(String login) {
+        String query = "SELECT * FROM "+ DB_NAME + ".users WHERE login = ?";
+        User user = null;
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, login);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                salt = resultSet.getBytes("salt");
+                user = getUserFromResultSet(resultSet);
             }
         } catch (SQLException e) {
             logger.error("Can't get user_id by login = " + login, e);
         }
-        return salt;
+        return Optional.of(user);
     }
 
     @Override
@@ -220,6 +219,7 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
         user.setName(resultSet.getString("name"));
         user.setSurname(resultSet.getString("surname"));
         user.setLogin(resultSet.getString("login"));
+        user.setSalt(resultSet.getBytes("salt"));
         user.setToken(resultSet.getString("token"));
         user.setRoles(roleDao.getRoles(get(user.getId()).get()));
         return user;

@@ -48,7 +48,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order completeOrder(Bucket bucket) {
-        Order order = new Order(bucket.getUserId(), bucket.getItems());
+        Order order = new Order(bucket.getUser().getId(), bucket.getItems());
         return orderDao.create(order);
     }
 }

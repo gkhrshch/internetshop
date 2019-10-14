@@ -9,15 +9,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import mate.academy.internetshop.dao.BucketDao;
+import mate.academy.internetshop.dao.UserDao;
 import mate.academy.internetshop.lib.Dao;
+import mate.academy.internetshop.lib.Inject;
 import mate.academy.internetshop.model.Bucket;
 import mate.academy.internetshop.model.Item;
+import mate.academy.internetshop.model.User;
 import org.apache.log4j.Logger;
 
 @Dao
 public class BucketDaoJdbcImpl extends AbstractDao<Bucket> implements BucketDao {
     private static Logger logger = Logger.getLogger(BucketDaoJdbcImpl.class);
     private static String DB_NAME = "internetshop";
+
+    @Inject
+    private static UserDao userDao;
 
     public BucketDaoJdbcImpl(Connection connection) {
         super(connection);
@@ -28,7 +34,7 @@ public class BucketDaoJdbcImpl extends AbstractDao<Bucket> implements BucketDao 
         String query = "INSERT INTO " + DB_NAME + ".buckets (user_id) VALUES (?);";
         try (PreparedStatement statement
                      = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-            Long userId = bucket.getUserId();
+            Long userId = bucket.getUser().getId();
             statement.setLong(1, userId);
             statement.executeUpdate();
             ResultSet resultSet = statement.getGeneratedKeys();
@@ -54,7 +60,7 @@ public class BucketDaoJdbcImpl extends AbstractDao<Bucket> implements BucketDao 
                 Long userId = resultSet.getLong("user_id");
                 bucket = new Bucket();
                 bucket.setId(bucketId);
-                bucket.setUserId(userId);
+                bucket.setUser(userDao.get(userId).get());
                 List<Item> items = getItems(bucketId);
                 bucket.setItems(items);
             }
@@ -96,7 +102,7 @@ public class BucketDaoJdbcImpl extends AbstractDao<Bucket> implements BucketDao 
                 + ".buckets SET user_id = ? WHERE bucket_id = ?;";
         try (PreparedStatement statementBuckets = connection.prepareStatement(query,
                 Statement.RETURN_GENERATED_KEYS)) {
-            statementBuckets.setLong(1, bucket.getUserId());
+            statementBuckets.setLong(1, bucket.getUser().getId());
             statementBuckets.setLong(2, bucket.getId());
             statementBuckets.executeUpdate();
             ResultSet keys = statementBuckets.getGeneratedKeys();

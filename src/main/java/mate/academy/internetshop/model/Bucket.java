@@ -1,5 +1,8 @@
 package mate.academy.internetshop.model;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,9 +15,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "buckets")
@@ -27,7 +27,7 @@ public class Bucket {
     @JoinTable(name = "buckets_items",
             joinColumns = @JoinColumn(name = "bucket_id", referencedColumnName = "bucket_id"),
             inverseJoinColumns = @JoinColumn(name = "item_id", referencedColumnName = "item_id"))
-    private List<Item> items;
+    private List<Item> items = new ArrayList<>();
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     private User user;
@@ -60,5 +60,24 @@ public class Bucket {
 
     public void setItems(List<Item> items) {
         this.items = items;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Bucket bucket = (Bucket) o;
+        return Objects.equals(id, bucket.id)
+                && Objects.equals(items, bucket.items)
+                && Objects.equals(user, bucket.user);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, items, user);
     }
 }

@@ -10,14 +10,11 @@ import java.util.List;
 import java.util.Optional;
 import mate.academy.internetshop.dao.BucketDao;
 import mate.academy.internetshop.dao.UserDao;
-import mate.academy.internetshop.lib.Dao;
 import mate.academy.internetshop.lib.Inject;
 import mate.academy.internetshop.model.Bucket;
 import mate.academy.internetshop.model.Item;
-import mate.academy.internetshop.model.User;
 import org.apache.log4j.Logger;
 
-@Dao
 public class BucketDaoJdbcImpl extends AbstractDao<Bucket> implements BucketDao {
     private static Logger logger = Logger.getLogger(BucketDaoJdbcImpl.class);
     private static String DB_NAME = "internetshop";

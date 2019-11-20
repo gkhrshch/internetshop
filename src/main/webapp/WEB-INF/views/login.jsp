@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Stella
-  Date: 20.09.2019
-  Time: 7:48
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -12,7 +5,7 @@
 </head>
 <body>
 <div>${errorMsg}</div>
-<form action="/internetshop_war_exploded/login" method="post">
+<form action="${pageContext.request.contextPath}/login" method="post">
     <div class="container">
         <h1>Login</h1>
         <p>Please fill in this form to sign in into account.</p>
@@ -29,7 +22,7 @@
     </div>
 
     <div class="container signin">
-        <p>Don't have an account?<a href='/internetshop_war_exploded/registration'>Sign up</a></p>
+        <p>Don't have an account?<a href='${pageContext.request.contextPath}/registration'>Sign up</a></p>
     </div>
 </form>
 </body>

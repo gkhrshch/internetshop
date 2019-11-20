@@ -1,11 +1,4 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%--
-  Created by IntelliJ IDEA.
-  User: Stella
-  Date: 18.09.2019
-  Time: 17:59
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -33,13 +26,13 @@
                 <c:out value="${item.price}" />
             </td>
             <td>
-                <a href="/internetshop_war_exploded/servlet/bucketRemoveItem?item_id=${item.id}">REMOVE</a>
+                <a href="${pageContext.request.contextPath}/servlet/bucketRemoveItem?item_id=${item.id}">REMOVE</a>
             </td>
         </tr>
     </c:forEach>
 </table>
 </body>
-<form action="/internetshop_war_exploded/servlet/completeOrder" method="get">
+<form action="${pageContext.request.contextPath}/servlet/completeOrder" method="get">
         <button type="submit" class="registerbtn">Complete Order</button>
 </form>
 </html>

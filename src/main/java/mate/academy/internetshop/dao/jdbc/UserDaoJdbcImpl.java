@@ -13,7 +13,6 @@ import mate.academy.internetshop.dao.BucketDao;
 import mate.academy.internetshop.dao.RoleDao;
 import mate.academy.internetshop.dao.UserDao;
 import mate.academy.internetshop.exceptions.AuthenticationException;
-import mate.academy.internetshop.lib.Dao;
 import mate.academy.internetshop.lib.Inject;
 import mate.academy.internetshop.model.Bucket;
 import mate.academy.internetshop.model.Role;
@@ -21,7 +20,6 @@ import mate.academy.internetshop.model.User;
 import mate.academy.internetshop.util.HashUtil;
 import org.apache.log4j.Logger;
 
-@Dao
 public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
     private static Logger logger = Logger.getLogger(UserDaoJdbcImpl.class);
     private static String DB_NAME = "internetshop";
@@ -38,7 +36,8 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
     @Override
     public User create(User user) {
         String query = "INSERT INTO " + DB_NAME
-                + ".users (name, surname, login, password, token, salt) VALUES (?, ?, ?, ?, ?, ?);";
+                + ".users (name, surname, login, password, token, salt) "
+                + "VALUES (?, ?, ?, ?, ?, ?);";
         try (PreparedStatement statement
                      = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, user.getName());
@@ -183,7 +182,7 @@ public class UserDaoJdbcImpl extends AbstractDao<User> implements UserDao {
     }
 
     private Optional<User> getUserByLogin(String login) {
-        String query = "SELECT * FROM "+ DB_NAME + ".users WHERE login = ?";
+        String query = "SELECT * FROM " + DB_NAME + ".users WHERE login = ?";
         User user = null;
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, login);

@@ -1,5 +1,11 @@
 package mate.academy.internetshop.model;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,13 +16,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -34,8 +36,8 @@ public class User {
     private String token;
     @OneToOne(mappedBy = "user")
     private Bucket bucket;
-    @Transient
-    private List<Order> orders;
+    @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
+    private List<Order> orders = new ArrayList<>();
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "roles_users",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"),
@@ -142,8 +144,34 @@ public class User {
         return "User{"
                 + "id=" + id
                 + ", name=" + name
-                + ", orders=" + orders
-                //+ ", bucket=" + this.bucket.getItems()
+                //+ ", orders=" + orders
                 + '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        User user = (User) o;
+        return Objects.equals(name, user.name)
+                && Objects.equals(surname, user.surname)
+                && Objects.equals(login, user.login)
+                && Objects.equals(password, user.password)
+                && Arrays.equals(salt, user.salt)
+                && Objects.equals(token, user.token)
+                && Objects.equals(bucket, user.bucket)
+                && Objects.equals(orders, user.orders)
+                && Objects.equals(roles, user.roles);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(id, name, surname, login, password, token, bucket, orders, roles);
+        result = 31 * result + Arrays.hashCode(salt);
+        return result;
     }
 }

@@ -1,21 +1,19 @@
 package mate.academy.internetshop.dao.hibernate;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-
 import mate.academy.internetshop.dao.BucketDao;
 import mate.academy.internetshop.dao.UserDao;
 import mate.academy.internetshop.exceptions.AuthenticationException;
 import mate.academy.internetshop.lib.Dao;
 import mate.academy.internetshop.lib.Inject;
-import mate.academy.internetshop.model.Bucket;
 import mate.academy.internetshop.model.Role;
 import mate.academy.internetshop.model.User;
 import mate.academy.internetshop.util.HashUtil;
 import mate.academy.internetshop.util.HibernateUtil;
 import org.apache.log4j.Logger;
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
@@ -37,7 +35,7 @@ public class UserDaoHibernateImpl implements UserDao {
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
-                logger.error("Could not create user", e);
+                logger.error("Can't create user", e);
                 transaction.rollback();
             }
         }
@@ -47,29 +45,61 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void addRoles(User user, Set<Role> roles) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Set<Role> userRoles = user.getRoles();
+            userRoles.addAll(roles);
+            update(user);
+        } catch (Exception e) {
+            logger.error("Can't add roles for user", e);
+        }
     }
 
     @Override
     public Optional<User> get(Long id) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             User user = session.get(User.class, id);
+            Hibernate.initialize(user.getOrders());
             return Optional.of(user);
         }
     }
 
     @Override
     public User update(User user) {
-        return null;
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            session.update(user);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+        }
+        return user;
     }
 
     @Override
     public User delete(Long id) {
-        return null;
+        User user = null;
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
+            user = get(id).get();
+            session.delete(user);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+        }
+        return user;
     }
 
     @Override
     public List<User> getAll() {
-        return null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery("FROM User").list();
+        }
     }
 
     @Override

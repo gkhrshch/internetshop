@@ -7,12 +7,10 @@ import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
 import mate.academy.internetshop.dao.RoleDao;
-import mate.academy.internetshop.lib.Dao;
 import mate.academy.internetshop.model.Role;
 import mate.academy.internetshop.model.User;
 import org.apache.log4j.Logger;
 
-@Dao
 public class RoleDaoJdbcImpl extends AbstractDao<Role> implements RoleDao {
     private static Logger logger = Logger.getLogger(RoleDaoJdbcImpl.class);
     private static String DB_NAME = "internetshop";

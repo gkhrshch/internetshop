@@ -1,7 +1,7 @@
 .idea/*
 *.iml
 target/*
-*.log
+*.log*
 Main.class
 InjectorOld.class
 Main.java

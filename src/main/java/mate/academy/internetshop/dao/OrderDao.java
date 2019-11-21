@@ -6,7 +6,6 @@ import mate.academy.internetshop.lib.Dao;
 import mate.academy.internetshop.model.Item;
 import mate.academy.internetshop.model.Order;
 
-@Dao
 public interface OrderDao {
 
     Order create(Order order);

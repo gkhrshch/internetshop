@@ -28,8 +28,10 @@ public class UserDaoHibernateImpl implements UserDao {
     @Override
     public User create(User user) {
         Long userId = null;
+        Session session = null;
         Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
             transaction = session.beginTransaction();
             userId = (Long) session.save(user);
             transaction.commit();
@@ -37,6 +39,10 @@ public class UserDaoHibernateImpl implements UserDao {
             if (transaction != null) {
                 logger.error("Can't create user", e);
                 transaction.rollback();
+            }
+        } finally {
+            if (session != null) {
+                session.close();
             }
         }
         user.setId(userId);

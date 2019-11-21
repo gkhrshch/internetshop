@@ -5,7 +5,6 @@ import java.util.Optional;
 import mate.academy.internetshop.lib.Dao;
 import mate.academy.internetshop.model.Item;
 
-@Dao
 public interface ItemDao {
 
     Item create(Item item);

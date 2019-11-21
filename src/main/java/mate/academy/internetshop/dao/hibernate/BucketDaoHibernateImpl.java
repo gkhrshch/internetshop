@@ -24,14 +24,20 @@ public class BucketDaoHibernateImpl implements BucketDao {
     @Override
     public Bucket create(Bucket bucket) {
         Long bucketId = null;
+        Session session = null;
         Transaction transaction = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
             transaction = session.beginTransaction();
             bucketId = (Long) session.save(bucket);
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
+            }
+        } finally {
+            if (session != null) {
+                session.close();
             }
         }
         bucket.setId(bucketId);
@@ -105,7 +111,6 @@ public class BucketDaoHibernateImpl implements BucketDao {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Bucket bucket = get(bucketId).get();
             List<Item> list = bucket.getItems();
-            Item toDelete = itemDao.get(itemId).get();
             for (Item item : list) {
                 if (item.getId().equals(itemId)) {
                     list.remove(item);

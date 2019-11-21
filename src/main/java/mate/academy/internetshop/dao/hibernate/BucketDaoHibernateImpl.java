@@ -112,7 +112,6 @@ public class BucketDaoHibernateImpl implements BucketDao {
             Bucket bucket = get(bucketId).get();
             List<Item> list = bucket.getItems();
             for (Item item : list) {
-
                 if (item.getId().equals(itemId)) {
                     list.remove(item);
                     break;

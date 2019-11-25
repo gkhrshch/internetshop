@@ -1,11 +1,13 @@
 package mate.academy.internetshop.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import mate.academy.internetshop.lib.Inject;
+import mate.academy.internetshop.model.Bucket;
 import mate.academy.internetshop.model.Item;
 import mate.academy.internetshop.model.Role;
 import mate.academy.internetshop.model.User;
@@ -13,12 +15,10 @@ import mate.academy.internetshop.service.BucketService;
 import mate.academy.internetshop.service.ItemService;
 import mate.academy.internetshop.service.OrderService;
 import mate.academy.internetshop.service.UserService;
+import mate.academy.internetshop.util.HashUtil;
 import org.apache.log4j.Logger;
 
-//TODO: Inject test data does not work properly at the moment,
-// mock test data manually with SQL scripts
 public class InjectData extends HttpServlet {
-
     @Inject
     private static UserService userService;
     @Inject
@@ -50,14 +50,28 @@ public class InjectData extends HttpServlet {
         user.addRole(Role.of("USER"));
         user.setLogin("1");
         user.setPassword("1");
+        byte[] salt = HashUtil.getSalt();
+        user.setSalt(salt);
+        String userHashedPassword = HashUtil.hashPassword(user.getPassword(), salt);
+        user.setPassword(userHashedPassword);
+        user.setOrders(new ArrayList<>());
+        Bucket newBucket = new Bucket();
+        newBucket.setItems(new ArrayList<>());
+        newBucket.setUser(user);
+        Bucket bucket = bucketService.create(newBucket);
+        user.setBucket(bucket);
         userService.create(user);
 
         User admin = new User();
-        admin.setName("anonym");
-        admin.setSurname("anonymchenko");
+        admin.setName("admin");
+        admin.setSurname("admin");
         admin.addRole(Role.of("ADMIN"));
         admin.setLogin("admin");
         admin.setPassword("admin");
+        salt = HashUtil.getSalt();
+        admin.setSalt(salt);
+        String adminHashedPassword = HashUtil.hashPassword(admin.getPassword(), salt);
+        admin.setPassword(adminHashedPassword);
         userService.create(admin);
         resp.sendRedirect(req.getContextPath() + "/servlet/index");
     }

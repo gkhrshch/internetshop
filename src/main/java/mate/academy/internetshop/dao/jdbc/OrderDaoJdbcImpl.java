@@ -10,14 +10,12 @@ import java.util.List;
 import java.util.Optional;
 import mate.academy.internetshop.dao.OrderDao;
 import mate.academy.internetshop.dao.UserDao;
-import mate.academy.internetshop.lib.Dao;
 import mate.academy.internetshop.lib.Inject;
 import mate.academy.internetshop.model.Item;
 import mate.academy.internetshop.model.Order;
 import mate.academy.internetshop.model.User;
 import org.apache.log4j.Logger;
 
-@Dao
 public class OrderDaoJdbcImpl extends AbstractDao<Order> implements OrderDao {
     private static Logger logger = Logger.getLogger(OrderDaoJdbcImpl.class);
     private static String DB_NAME = "internetshop";
@@ -39,7 +37,7 @@ public class OrderDaoJdbcImpl extends AbstractDao<Order> implements OrderDao {
                      = connection.prepareStatement(addOrderQuery, Statement.RETURN_GENERATED_KEYS);
                  PreparedStatement addItemsStmt
                          = connection.prepareStatement(addItemsQuery)) {
-            addOrderStmt.setLong(1, order.getUserId());
+            addOrderStmt.setLong(1, order.getUser().getId());
             addOrderStmt.executeUpdate();
             ResultSet keys = addOrderStmt.getGeneratedKeys();
             if (keys.next()) {

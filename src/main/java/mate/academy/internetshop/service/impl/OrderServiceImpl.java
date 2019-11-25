@@ -8,6 +8,7 @@ import mate.academy.internetshop.lib.Service;
 import mate.academy.internetshop.model.Bucket;
 import mate.academy.internetshop.model.Item;
 import mate.academy.internetshop.model.Order;
+import mate.academy.internetshop.model.User;
 import mate.academy.internetshop.service.OrderService;
 
 @Service
@@ -40,15 +41,20 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order completeOrder(List<Item> items, Long userId) {
-        Order order = new Order(userId, items);
-        userDao.get(userId).get().getOrders().add(order);
+        Order order = new Order();
+        order.setItems(items);
+        User user = userDao.get(userId).get();
+        order.setUserId(user.getId());
+        order.setUser(user);
         orderDao.create(order);
+        user.getOrders().add(order);
+        userDao.update(user);
         return order;
     }
 
     @Override
     public Order completeOrder(Bucket bucket) {
-        Order order = new Order(bucket.getUserId(), bucket.getItems());
+        Order order = new Order(bucket.getUser().getId(), bucket.getItems());
         return orderDao.create(order);
     }
 }

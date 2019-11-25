@@ -6,13 +6,6 @@ create table items
     price   decimal(6, 2) not null
 );
 
-create table roles
-(
-    role_id   int auto_increment
-        primary key,
-    role_name varchar(45) not null
-);
-
 create table users
 (
     user_id  int auto_increment
@@ -23,6 +16,13 @@ create table users
     password varchar(1000) not null,
     token    varchar(45)   null,
     salt     blob          not null
+);
+
+create table roles
+(
+    role_id   int auto_increment
+        primary key,
+    role_name varchar(45) not null
 );
 
 create table buckets
@@ -102,4 +102,3 @@ create index roles_users_roles_fk_idx
 
 create index roles_users_users_fk_idx
     on roles_users (user_id);
-

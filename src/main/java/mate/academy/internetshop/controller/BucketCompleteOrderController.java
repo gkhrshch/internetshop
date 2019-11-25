@@ -25,7 +25,7 @@ public class BucketCompleteOrderController extends HttpServlet {
             throws ServletException, IOException {
         Long userId = (Long) req.getSession(true).getAttribute("userId");
         Long bucketId = bucketService.getBucketByUserId(userId).getId();
-        orderService.completeOrder(bucketService.getAllItems(bucketService.get(bucketId)), userId);
+        orderService.completeOrder(bucketService.get(bucketId).getItems(), userId);
         bucketService.clear(bucketId);
         List<Order> orders = userService.getOrders(userId);
         req.setAttribute("name", userService.get(userId).get().getName());

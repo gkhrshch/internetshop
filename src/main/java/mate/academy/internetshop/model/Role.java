@@ -1,7 +1,10 @@
 package mate.academy.internetshop.model;
 
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -15,6 +18,7 @@ public class Role {
     @Column(name = "role_id", columnDefinition = "INTEGER")
     private Long id;
     @Column(name = "role_name", columnDefinition = "VARCHAR")
+    @Enumerated(EnumType.STRING)
     private RoleName roleName;
 
     public Role() {}
@@ -45,5 +49,22 @@ public class Role {
 
     public enum RoleName {
         USER, ADMIN;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Role role = (Role) o;
+        return roleName == role.roleName;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, roleName);
     }
 }

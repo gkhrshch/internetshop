@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Stella
-  Date: 18.09.2019
-  Time: 15:28
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -13,7 +6,7 @@
 <body>
 Let's create a new User!
 <p></p>
-<form action="/internetshop_war_exploded/registration" method="post">
+<form action="${pageContext.request.contextPath}/registration" method="post">
     <div class="container">
         <h1>Register</h1>
         <p>Please fill in this form to create an account.</p>
@@ -40,7 +33,7 @@ Let's create a new User!
     </div>
 
     <div class="container signin">
-        <p>Already have an account? <a href='/internetshop_war_exploded/login'>Sign up</a></p>
+        <p>Already have an account? <a href='${pageContext.request.contextPath}/login'>Sign up</a></p>
     </div>
 </form>
 </body>

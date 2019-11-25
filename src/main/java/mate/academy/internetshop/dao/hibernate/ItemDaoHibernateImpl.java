@@ -1,6 +1,7 @@
 package mate.academy.internetshop.dao.hibernate;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import mate.academy.internetshop.dao.ItemDao;
@@ -12,6 +13,7 @@ import org.hibernate.Transaction;
 
 @Dao
 public class ItemDaoHibernateImpl implements ItemDao {
+
     @Override
     public Item create(Item item) {
         Long itemId = null;
@@ -21,6 +23,7 @@ public class ItemDaoHibernateImpl implements ItemDao {
             itemId = (Long) session.save(item);
             transaction.commit();
         } catch (Exception e) {
+
             if (transaction != null) {
                 transaction.rollback();
             }
@@ -74,6 +77,7 @@ public class ItemDaoHibernateImpl implements ItemDao {
         List<Item> items = new ArrayList<>();
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             items = session.createQuery("FROM Item").list();
+            items.sort(Comparator.naturalOrder());
             return items;
         }
     }

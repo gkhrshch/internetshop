@@ -8,11 +8,11 @@ import mate.academy.internetshop.dao.ItemDao;
 import mate.academy.internetshop.dao.OrderDao;
 import mate.academy.internetshop.dao.RoleDao;
 import mate.academy.internetshop.dao.UserDao;
+import mate.academy.internetshop.dao.hibernate.BucketDaoHibernateImpl;
 import mate.academy.internetshop.dao.hibernate.ItemDaoHibernateImpl;
-import mate.academy.internetshop.dao.jdbc.BucketDaoJdbcImpl;
-import mate.academy.internetshop.dao.jdbc.OrderDaoJdbcImpl;
-import mate.academy.internetshop.dao.jdbc.RoleDaoJdbcImpl;
-import mate.academy.internetshop.dao.jdbc.UserDaoJdbcImpl;
+import mate.academy.internetshop.dao.hibernate.OrderDaoHibernateImpl;
+import mate.academy.internetshop.dao.hibernate.RoleDaoHibernateImpl;
+import mate.academy.internetshop.dao.hibernate.UserDaoHibernateImpl;
 import mate.academy.internetshop.service.BucketService;
 import mate.academy.internetshop.service.ItemService;
 import mate.academy.internetshop.service.OrderService;
@@ -57,28 +57,28 @@ public class Factory {
 
     public static BucketDao getBucketDao() {
         if (bucketDaoInstance == null) {
-            bucketDaoInstance = new BucketDaoJdbcImpl(connection);
+            bucketDaoInstance = new BucketDaoHibernateImpl();
         }
         return bucketDaoInstance;
     }
 
     public static OrderDao getOrderDao() {
         if (orderDaoInstance == null) {
-            orderDaoInstance = new OrderDaoJdbcImpl(connection);
+            orderDaoInstance = new OrderDaoHibernateImpl();
         }
         return orderDaoInstance;
     }
 
     public static UserDao getUserDao() {
         if (userDaoInstance == null) {
-            userDaoInstance = new UserDaoJdbcImpl(connection);
+            userDaoInstance = new UserDaoHibernateImpl();
         }
         return userDaoInstance;
     }
 
     public static RoleDao getRoleDao() {
         if (roleDaoInstance == null) {
-            roleDaoInstance = new RoleDaoJdbcImpl(connection);
+            roleDaoInstance = new RoleDaoHibernateImpl();
         }
         return roleDaoInstance;
     }
